@@ -1,0 +1,28 @@
+# Create Storage VM
+---
+- name: Create rhel QEMU image at the desired size
+  ansible.builtin.shell: "qemu-img create -f qcow2 -o preallocation=metadata,cluster_size=2M {{ resized_rhel_qcow }} {{ resized_rhel_qcow_disk_size }}"
+
+- name: Use rhel RHCOS image and resize it to the new QEMU image
+  ansible.builtin.shell: "virt-resize --quiet --expand /dev/sda4 {{ rhel_qcow }} {{ resized_rhel_qcow }}"
+
+- name: Copy QEMU image file to VM storage pool
+  ansible.builtin.copy:
+    src: "{{ resized_rhel_qcow }}"
+    dest: "{{ cluster_vms_storage_base_dir }}"
+    owner: qemu
+    group: qemu
+    mode: '0775'
+
+- name: Create stoage VM
+  ansible.builtin.shell:
+    cmd: "virt-install --virt-type kvm --name {{ storage_name }} \
+        --ram {{ storage_memory }} --cpu host-passthrough --vcpus {{ storage_vcpu }} \
+        --disk {{ cluster_vms_storage_base_dir }}/{{ resized_rhel_qcow }},device=disk,bus=virtio,format=qcow2 \
+        --disk {{ cluster_vms_storage_base_dir }}/{{ storage_disk1_name }},device=disk,bus=virtio,format=qcow2,size={{ storage_disk1_size }} \
+        --disk {{ cluster_vms_storage_base_dir }}/{{ storage_disk2_name }},device=disk,bus=virtio,format=qcow2,size={{ storage_disk2_size }} \
+        --disk {{ cluster_vms_storage_base_dir }}/{{ storage_disk3_name }},device=disk,bus=virtio,format=qcow2,size={{ storage_disk3_size }} \
+        --os-type linux --os-variant {{ storage_os_varient }} \
+        --network bridge={{ libvirt_bridge_name }},mac={{ storage_mac }} \
+        --boot hd,network --noreboot --autostart \
+        --vnc --noautoconsole"

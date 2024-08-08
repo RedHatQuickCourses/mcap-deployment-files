@@ -1,0 +1,34 @@
+---
+- name: Find the 3.5TB nvme disk1
+  ansible.builtin.shell: lsblk | grep -i 3.5T | awk '{print $1}' | awk 'NR==1'
+  register: lv_disk1
+
+- name: Find the 3.5TB nvme disk2
+  ansible.builtin.shell: lsblk | grep -i 3.5T | awk '{print $1}' | awk 'NR==2'
+  register: lv_disk2
+
+- name: Create a PV of 7TB with disks
+  ansible.builtin.shell: pvcreate /dev/{{ lv_disk1.stdout }} /dev/{{ lv_disk2.stdout }}
+
+- name: Create VG of 7TB
+  community.general.lvg:
+    vg: vgstrorage
+    pvs: /dev/{{ lv_disk1.stdout }},/dev/{{ lv_disk2.stdout }}
+
+- name: Create a LV of 7TB with remaining space in the volume group
+  community.general.lvol:
+    vg: vgstrorage
+    lv: cephlv
+    size: 100%FREE
+
+- name: Format LV of 7TB with the ext4 filesystem
+  community.general.filesystem:
+    fstype: ext4
+    dev: /dev/vgstrorage/cephlv
+
+- name: Mount the 7TB LV on /var/lib/libvirt/images
+  ansible.posix.mount:
+    path: /var/lib/libvirt/images
+    src: /dev/vgstrorage/cephlv
+    fstype: ext4
+    state: mounted

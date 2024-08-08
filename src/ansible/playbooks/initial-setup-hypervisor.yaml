@@ -1,0 +1,64 @@
+---
+- name: Create an ssh key for the root user
+  ansible.builtin.shell: ssh-keygen -t rsa -f /root/.ssh/id_rsa -N ''
+
+- name: Install required packages on hypervisor
+  ansible.builtin.dnf:
+    name: "{{ packages_hypervisor }}"
+    state: latest
+
+- name: Create swap partition on nvme disk in hypervisor
+  include_tasks: ./swap.yaml
+
+- name: Create backend LV for ceph storage using nvme disks from hypervisor
+  include_tasks: ./lvm.yaml
+
+- name: Enable libvirt and cockpit services on hypervisor
+  ansible.builtin.service:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  loop:
+    - libvirt-guests
+    - libvirtd
+    - cockpit.socket
+
+- name: Configure dhcp server on hypervisor
+  include_tasks: ./dhcpd.yaml
+
+- name: Configure dns server on hypervisor
+  include_tasks: ./dns.yaml
+
+- name: Configure http server on hypervisor
+  include_tasks: ./httpd.yaml
+
+- name: Create {{ staging_base_dir }} directory
+  ansible.builtin.file:
+    state: directory
+    path: "{{ staging_base_dir }}"
+
+- name: Create {{ storage_dir }} directory
+  ansible.builtin.file:
+    state: directory
+    path: "{{ storage_dir }}"
+
+- name: Define a new storage pool
+  community.libvirt.virt_pool:
+    command: define
+    name: images
+    xml: '{{ lookup("template", "templates/storagepool.xml.j2") }}'
+
+- name: Build a storage pool if it does not exist
+  community.libvirt.virt_pool:
+    command: build
+    name: images
+
+- name: Start a storage pool
+  community.libvirt.virt_pool:
+    command: create
+    name: images
+
+- name: Autostart a storage pool
+  community.libvirt.virt_pool:
+    autostart: yes
+    name: images

@@ -1,0 +1,63 @@
+########### Hypervisor ############
+packages_hypervisor:
+  - jq
+  - dhcp-server
+  - bind
+  - bind-utils
+  - httpd
+  - httpd-tools
+  - podman
+  - vim
+  - wget
+  - telnet
+  - curl
+  - lvm2
+  - git
+  - libvirt
+  - qemu-kvm
+  - virt-manager
+  - virt-install
+  - libguestfs-tools
+  - libguestfs-tools-c
+  - cockpit
+  - cockpit-machines
+  - unzip
+  - tar
+  - tigervnc
+  - tigervnc-server
+  - firefox
+  - gnome-kiosk
+
+staging_base_dir: "/var/tmp/ansible"
+cluster_vms_storage_base_dir: "/var/lib/libvirt/images"
+libvirt_bridge_name: "virbr0"
+
+########## Storage VM #############
+storage_name: "storage"
+storage_hostname: "storage.lab.example.com"
+storage_mac: "52:54:00:0a:a9:88"
+storage_vcpu: "8"
+storage_memory: "16384"
+storage_disk1_name: "ceph-disk1.qcow2"
+storage_disk2_name: "ceph-disk2.qcow2"
+storage_disk3_name: "ceph-disk3.qcow2"
+storage_disk1_size: "2000"
+storage_disk2_size: "2000"
+storage_disk3_size: "2000"
+storage_os_varient: "rhel9.3"
+storage_dir: "{{ staging_base_dir }}/{{ storage_name }}"
+rhel_file_name: "rhel-9.3-x86_64-kvm.qcow2"
+rhel_qcow: "{{ storage_dir }}/{{ rhel_file_name }}"
+resized_rhel_qcow_disk_size: "50G"
+resized_rhel_qcow: "storage.qcow2"
+
+# Web Server
+web_server:
+  name: infra-ddi.arvhomelab.com
+  groups: webserver
+  files_root_path: /var/www/html
+  http_base_url: "http://infra-ddi.arvhomelab.com"
+
+web_server_files_bin_path: "{{ web_server.files_root_path }}/bin/{{ ocp_version }}"
+web_server_files_cluster_path: "{{ web_server.files_root_path }}/{{ ocp_cluster_name }}"
+web_server_http_rhcos_url: "{{ web_server.http_base_url }}/bin/{{ ocp_version }}/{{ kubevirt_rhcos_bin_file_name }}"

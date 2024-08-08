@@ -1,0 +1,10 @@
+collections:
+- name: community.libvirt
+- name: community.general
+- name: kubernetes.core
+- name: ansible.posix
+#- name: community.hashi_vault
+#- name: community.kubernetes
+# - name: awx.awx
+# - name: ansible.utils
+# - name: ansible.netcommon

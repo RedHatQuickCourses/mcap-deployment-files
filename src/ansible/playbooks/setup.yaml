@@ -1,0 +1,13 @@
+- hosts: localhost
+  become: yes
+  vars_files:
+    - host_vars/hypervisor
+  tasks:
+    - name: Prepare hypervisor
+      include_tasks: ./initial-setup-hypervisor.yaml
+
+    #- name: Configure storage
+    #  include_tasks: ./storage.yaml
+
+    #- name: Deploy ceph storage on storage VM
+    #  include_tasks: ./deploy-ceph-storage.yaml

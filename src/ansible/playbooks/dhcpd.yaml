@@ -1,0 +1,17 @@
+---
+- name: Copy dhcpd.conf file
+  ansible.builtin.copy:
+    src: ../configs/dhcpd.conf
+    dest: /etc/dhcp/dhcpd.conf
+
+- name: Change the selinux context of /etc/dhcp/dhcpd.conf file
+  ansible.builtin.shell: chcon system_u:object_r:dhcp_etc_t:s0 /etc/dhcp/dhcpd.conf
+
+- name: Apply new SELinux file context to /etc/dhcp/dhcpd.conf file
+  ansible.builtin.shell: restorecon -vF /etc/dhcp/dhcpd.conf
+
+- name: Enable and start dhcpd service on hypervisor
+  ansible.builtin.service:
+    name: dhcpd
+    enabled: yes
+    state: started

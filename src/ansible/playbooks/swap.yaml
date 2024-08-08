@@ -1,0 +1,47 @@
+---
+- name: swapoff on hypervisor
+  ansible.builtin.shell: swapoff -a
+
+- name: Disable existing swap partition
+  ansible.builtin.shell: sed -i '/swap/d' /etc/fstab
+
+- name: Find the 250GB nvme disk1
+  ansible.builtin.shell: lsblk | grep -i 238.5G | awk '{print $1}' | awk 'NR==1'
+  register: disk1
+
+- name: Find the 250GB nvme disk2
+  ansible.builtin.shell: lsblk | grep -i 238.5G | awk '{print $1}' | awk 'NR==2'
+  register: disk2
+
+- name: Find the used 250GB nvme disk
+  ansible.builtin.shell: blkid | awk '{print $1}' | tr -d ':' |  sed 's/\/dev//g' | sed 's/\///g' | awk 'NR==1' | cut -c 1-7
+  register: nvme_id
+
+- name: Configure 250GB nvme disk for usage as swap space
+  block:
+    - name: Run mkswap on disk
+      ansible.builtin.shell: mkswap /dev/{{ disk2.stdout }}
+
+    - name: Get UUID of the swap partition
+      ansible.builtin.shell: blkid /dev/{{ disk2.stdout }} | awk '{print $2}' | tr -d '"'
+      register: swap_uuid
+
+    - name: Update /etc/fstab entry
+      ansible.builtin.shell: echo "{{ swap_uuid.stdout }}	none	swap	none	0	0" >> /etc/fstab
+  when: nvme_id.stdout == disk1.stdout
+
+- name: Configure 250GB nvme disk for usage as swap space
+  block:
+    - name: Run mkswap on disk
+      ansible.builtin.shell: mkswap /dev/{{ disk1.stdout }}
+
+    - name: Get UUID of the swap partition
+      ansible.builtin.shell: blkid /dev/{{ disk1.stdout }} | awk '{print $2}' | tr -d '"'
+      register: swap_uuid
+
+    - name: Update /etc/fstab entry
+      ansible.builtin.shell: echo "{{ swap_uuid.stdout }}	none	swap	none	0	0" >> /etc/fstab
+  when: nvme_id.stdout == disk2.stdout
+
+- name: swapon on hypervisor
+  ansible.builtin.shell: swapon -a

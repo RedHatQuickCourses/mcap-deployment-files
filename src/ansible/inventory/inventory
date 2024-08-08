@@ -1,0 +1,2 @@
+hypervisor ansible_host=hypervisor ansible_user=root
+

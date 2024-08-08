@@ -1,0 +1,42 @@
+---
+- name: Copy named.conf file
+  ansible.builtin.copy:
+    src: ../configs/named.conf
+    dest: /etc/named.conf
+
+- name: Copy ocp4.example.com.zone
+  ansible.builtin.copy:
+    src: ../configs/lab.example.com.zone
+    dest: /var/named/lab.example.com.zone
+
+- name: Copy 122.168.192.in-addr.arpa
+  ansible.builtin.copy:
+    src: ../configs/122.168.192.in-addr.arpa
+    dest: /var/named/122.168.192.in-addr.arpa
+
+- name: Change the selinux context of /etc/named.conf file
+  ansible.builtin.shell: chcon system_u:object_r:named_conf_t:s0 /etc/named.conf
+
+- name: Change the selinux context of /var/named/lab.example.com.zone file
+  ansible.builtin.shell: chcon system_u:object_r:named_conf_t:s0 /var/named/lab.example.com.zone
+
+- name: Change the selinux context of /var/named/122.168.192.in-addr.arpa file
+  ansible.builtin.shell: chcon system_u:object_r:named_conf_t:s0 /var/named/122.168.192.in-addr.arpa
+
+- name: Apply new SELinux file context to /etc/named.conf file
+  ansible.builtin.shell: restorecon -vF /etc/named.conf
+
+- name: Apply new SELinux file context to /var/named/lab.example.com.zone file
+  ansible.builtin.shell: restorecon -vF /var/named/lab.example.com.zone
+
+- name: Apply new SELinux file context to /var/named/122.168.192.in-addr.arpa file
+  ansible.builtin.shell: restorecon -vF /var/named/122.168.192.in-addr.arpa
+
+- name: Enable and start named service on hypervisor
+  ansible.builtin.service:
+    name: named
+    enabled: yes
+    state: started
+
+- name: Update the /etc/resolv.conf file
+  ansible.builtin.shell: sed -i '2s/^/search lab.example.com\nnameserver 192.168.122.1\n/' /etc/resolv.conf

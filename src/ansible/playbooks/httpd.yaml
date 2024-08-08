@@ -1,0 +1,36 @@
+---
+- name: Copy userdir.conf file
+  ansible.builtin.copy:
+    src: ../configs/userdir.conf
+    dest: /etc/httpd/conf.d/userdir.conf
+
+- name: Create public_html directory
+  ansible.builtin.shell: mkdir /home/lab-user/public_html
+
+- name: Update permissions of /home/lab-user directory
+  ansible.builtin.file:
+    path: /home/lab-user
+    owner: lab-user
+    group: users
+    state: directory
+    mode: '0711'
+
+- name: Update permissions in public_html directory
+  ansible.builtin.file:
+    path: /home/lab-user/public_html
+    owner: lab-user
+    group: users
+    state: directory
+    mode: '0755'
+
+- name: Change the selinux context of /etc/httpd/conf.d/userdir.conf file
+  ansible.builtin.shell: chcon system_u:object_r:httpd_config_t:s0 /etc/httpd/conf.d/userdir.conf
+
+- name: Apply new SELinux file context to /etc/httpd/conf.d/userdir.conf file
+  ansible.builtin.shell: restorecon -vF /etc/httpd/conf.d/userdir.conf
+
+- name: Enable and start httpd service on hypervisor
+  ansible.builtin.service:
+    name: httpd
+    enabled: yes
+    state: started
