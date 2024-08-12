@@ -13,7 +13,7 @@
 - name: Create backend LV for ceph storage using nvme disks from hypervisor
   include_tasks: ./lvm.yaml
 
-- name: Enable libvirt and cockpit services on hypervisor
+- name: Enable libvirt, composer and cockpit services on hypervisor
   ansible.builtin.service:
     name: "{{ item }}"
     enabled: yes
@@ -22,6 +22,7 @@
     - libvirt-guests
     - libvirtd
     - cockpit.socket
+    - osbuild-composer.socket
 
 - name: Configure dhcp server on hypervisor
   include_tasks: ./dhcpd.yaml
@@ -41,6 +42,8 @@
   ansible.builtin.file:
     state: directory
     path: "{{ storage_dir }}"
+
+##Registration play##
 
 - name: Define a new storage pool
   community.libvirt.virt_pool:

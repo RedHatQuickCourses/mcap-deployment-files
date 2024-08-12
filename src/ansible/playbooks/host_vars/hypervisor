@@ -27,6 +27,11 @@ packages_hypervisor:
   - tigervnc-server
   - firefox
   - gnome-kiosk
+  - osbuild-composer
+  - composer-cli
+  - cockpit-composer
+  - bash-completion
+  - lorax
 
 staging_base_dir: "/var/tmp/ansible"
 cluster_vms_storage_base_dir: "/var/lib/libvirt/images"
