@@ -1,0 +1,63 @@
+---
+- name: Resize the "{{ sno_qcow }}" image
+  ansible.builtin.shell: qemu-img resize "{{ sno_qcow }}" +"{{ resized_sno_qcow_disk_size }}"
+
+- name: Resize the partition 4 of "{{ sno_qcow }}" image
+  ansible.builtin.shell: virt-customize -a "{{ sno_qcow }}" --run-command 'growpart /dev/sda 4'
+
+- name: Increase the filesystem on / of "{{ sno_qcow }}" image
+  ansible.builtin.shell: virt-customize -a "{{ sno_qcow }}" --run-command 'xfs_growfs /'
+
+- name: Set the root user password for "{{ sno_qcow }}" image
+  ansible.builtin.shell: virt-customize -a "{{ sno_qcow }}" --root-password password:redhat
+
+- name: Disable the cloud-init service in "{{ sno_qcow }}" image
+  ansible.builtin.shell: virt-customize -a "{{ sno_qcow }}" --run-command 'systemctl disable cloud-init'
+
+- name: Inject the root user’s public RSA key in "{{ sno_qcow }}" image
+  ansible.builtin.shell: virt-customize -a "{{ sno_qcow }}" --ssh-inject root:file:/root/.ssh/id_rsa.pub
+
+- name: SELinux relabel in "{{ sno_qcow }}" image
+  ansible.builtin.shell: virt-customize -a "{{ sno_qcow }}" --selinux-relabel
+
+- name: Create the image for sno1 VM using the "{{ sno_qcow }}" image
+  ansible.builtin.shell: qemu-img create -f qcow2 -F qcow2 -b "{{ sno_qcow }}" "{{ resized_sno1_qcow }}"
+
+- name: Create the image for sno2 VM using the "{{ sno_qcow }}" image
+  ansible.builtin.shell: qemu-img create -f qcow2 -F qcow2 -b "{{ sno_qcow }}" "{{ resized_sno2_qcow }}"
+
+- name: Create the image for sno3 VM using the "{{ sno_qcow }}" image
+  ansible.builtin.shell: qemu-img create -f qcow2 -F qcow2 -b "{{ sno_qcow }}" "{{ resized_sno3_qcow }}"
+
+- name: Create the sno1 VM
+  ansible.builtin.shell:
+    cmd: "virt-install --virt-type kvm --ram {{ sno_memory }} --vcpus {{ sno_vcpu }} \
+        --cpu=host-passthrough --os-variant {{ sno_os_varient }} --name {{ sno1_name }} \
+        --disk path={{ resized_sno1_qcow }},device=disk,bus=virtio,format=qcow2 \
+        --network bridge={{ libvirt_bridge_name }},mac={{ sno1_mac }} --boot hd,network \
+        --noautoconsole --vnc --noreboot"
+
+- name: Create the sno2 VM
+  ansible.builtin.shell:
+    cmd: "virt-install --virt-type kvm --ram {{ sno_memory }} --vcpus {{ sno_vcpu }} \
+        --cpu=host-passthrough --os-variant {{ sno_os_varient }} --name {{ sno2_name }} \
+        --disk path={{ resized_sno2_qcow }},device=disk,bus=virtio,format=qcow2 \
+        --network bridge={{ libvirt_bridge_name }},mac={{ sno2_mac }} --boot hd,network \
+        --noautoconsole --vnc --noreboot"
+
+- name: Create the sno3 VM
+  ansible.builtin.shell:
+    cmd: "virt-install --virt-type kvm --ram {{ sno_memory }} --vcpus {{ sno_vcpu }} \
+        --cpu=host-passthrough --os-variant {{ sno_os_varient }} --name {{ sno3_name }} \
+        --disk path={{ resized_sno3_qcow }},device=disk,bus=virtio,format=qcow2 \
+        --network bridge={{ libvirt_bridge_name }},mac={{ sno3_mac }} --boot hd,network \
+        --noautoconsole --vnc --noreboot"
+
+- name: Start the sno1 VM
+  ansible.builtin.shell: virsh start sno1
+
+- name: Start the sno2 VM
+  ansible.builtin.shell: virsh start sno2
+
+- name: Start the sno3 VM
+  ansible.builtin.shell: virsh start sno3

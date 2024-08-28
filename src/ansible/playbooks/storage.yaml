@@ -1,32 +1,38 @@
-# Create Storage VM
 ---
-- name: Build RHEL 9.3 image for storage VM
-  include_role:
-    name: image-builder
+- name: Resize the "{{ rhel_qcow }}" image
+  ansible.builtin.shell: qemu-img resize "{{ rhel_qcow }}" +"{{ resized_rhel_qcow_disk_size }}"
 
-- name: Create rhel QEMU image at the desired size
-  ansible.builtin.shell: "qemu-img create -f qcow2 -o preallocation=metadata,cluster_size=2M {{ resized_rhel_qcow }} {{ resized_rhel_qcow_disk_size }}"
+- name: Resize the partition 4 of "{{ rhel_qcow }}" image
+  ansible.builtin.shell: virt-customize -a "{{ rhel_qcow }}" --run-command 'growpart /dev/sda 4'
 
-- name: Use rhel RHCOS image and resize it to the new QEMU image
-  ansible.builtin.shell: "virt-resize --quiet --expand /dev/sda4 {{ rhel_qcow }} {{ resized_rhel_qcow }}"
+- name: Increase the filesystem on / of "{{ rhel_qcow }}" image
+  ansible.builtin.shell: virt-customize -a "{{ rhel_qcow }}" --run-command 'xfs_growfs /'
 
-- name: Copy QEMU image file to VM storage pool
-  ansible.builtin.copy:
-    src: "{{ resized_rhel_qcow }}"
-    dest: "{{ cluster_vms_storage_base_dir }}"
-    owner: qemu
-    group: qemu
-    mode: '0775'
+- name: Set the root user password for "{{ rhel_qcow }}" image
+  ansible.builtin.shell: virt-customize -a "{{ rhel_qcow }}" --root-password password:redhat
 
-- name: Create stoage VM
+- name: Disable the cloud-init service in "{{ rhel_qcow }}" image
+  ansible.builtin.shell: virt-customize -a "{{ rhel_qcow }}" --run-command 'systemctl disable cloud-init'
+
+- name: Inject the root user’s public RSA key in "{{ rhel_qcow }}" image
+  ansible.builtin.shell: virt-customize -a "{{ rhel_qcow }}" --ssh-inject root:file:/root/.ssh/id_rsa.pub
+
+- name: SELinux relabel in "{{ rhel_qcow }}" image
+  ansible.builtin.shell: virt-customize -a "{{ rhel_qcow }}" --selinux-relabel
+
+- name: Create the image for storage VM using the "{{ rhel_qcow }}" image
+  ansible.builtin.shell: qemu-img create -f qcow2 -F qcow2 -b "{{ rhel_qcow }}" "{{ resized_rhel_qcow }}"
+
+- name: Create the storage VM with three 2TB disks
   ansible.builtin.shell:
-    cmd: "virt-install --virt-type kvm --name {{ storage_name }} \
-        --ram {{ storage_memory }} --cpu host-passthrough --vcpus {{ storage_vcpu }} \
-        --disk {{ cluster_vms_storage_base_dir }}/{{ resized_rhel_qcow }},device=disk,bus=virtio,format=qcow2 \
-        --disk {{ cluster_vms_storage_base_dir }}/{{ storage_disk1_name }},device=disk,bus=virtio,format=qcow2,size={{ storage_disk1_size }} \
-        --disk {{ cluster_vms_storage_base_dir }}/{{ storage_disk2_name }},device=disk,bus=virtio,format=qcow2,size={{ storage_disk2_size }} \
-        --disk {{ cluster_vms_storage_base_dir }}/{{ storage_disk3_name }},device=disk,bus=virtio,format=qcow2,size={{ storage_disk3_size }} \
-        --os-type linux --os-variant {{ storage_os_varient }} \
-        --network bridge={{ libvirt_bridge_name }},mac={{ storage_mac }} \
-        --boot hd,network --noreboot --autostart \
-        --vnc --noautoconsole"
+    cmd: "virt-install --virt-type kvm --ram {{ storage_memory }} --vcpus {{ storage_vcpu }} \
+        --cpu=host-passthrough --os-variant {{ storage_os_varient }} --name {{ storage_name }} \
+        --disk path={{ resized_rhel_qcow }},device=disk,bus=virtio,format=qcow2 \
+        --disk path={{ cluster_vms_storage_base_dir }}/{{ storage_disk1_name }},device=disk,bus=virtio,format=qcow2,size={{ storage_disk1_size }} \
+        --disk path={{ cluster_vms_storage_base_dir }}/{{ storage_disk2_name }},device=disk,bus=virtio,format=qcow2,size={{ storage_disk2_size }} \
+        --disk path={{ cluster_vms_storage_base_dir }}/{{ storage_disk3_name }},device=disk,bus=virtio,format=qcow2,size={{ storage_disk3_size }} \
+        --network bridge={{ libvirt_bridge_name }},mac={{ storage_mac }} --boot hd,network --noautoconsole \
+        --vnc --noreboot"
+
+- name: Start the storage VM
+  ansible.builtin.shell: virsh start storage

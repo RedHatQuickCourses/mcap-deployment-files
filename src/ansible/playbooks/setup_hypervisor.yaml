@@ -6,6 +6,9 @@
     - name: Prepare hypervisor
       include_tasks: ./initial-setup-hypervisor.yaml
 
+    #- name: Create qcow2 for KVMs
+    #  include_tasks: ./qcow2.yaml
+
     #- name: Configure storage
     #  include_tasks: ./storage.yaml
 
