@@ -11,10 +11,6 @@ $TTL    604800
 
 hypervisor.                      IN	     A 	     192.168.122.1
 
-lb.lab.example.com.			   IN	     A	     192.168.122.3
-
-bootstrap.lab.example.com. 	   IN	     A      	192.168.122.4
-
 storage.lab.example.com.         IN	     A	     192.168.122.9
 hub.lab.example.com. 		   IN	     A 	     192.168.122.10
 sno1.lab.example.com. 		   IN	     A 	     192.168.122.11

@@ -11,9 +11,6 @@ $TTL    604800
 
 1.122.168.192.in-addr.arpa.	   IN	PTR	hypervisor.
 
-3.122.168.192.in-addr.arpa.	   IN	PTR	lb.lab.example.com.
-4.122.168.192.in-addr.arpa.	   IN	PTR	bootstrap.lab.example.com.
-
 9.122.168.192.in-addr.arpa.	   IN	PTR	storage.lab.example.com.
 10.122.168.192.in-addr.arpa.     IN	PTR	hub.lab.example.com.
 11.122.168.192.in-addr.arpa. 	   IN	PTR	sno1.lab.example.com.
