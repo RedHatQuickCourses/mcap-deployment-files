@@ -1,9 +1,0 @@
-- hosts: localhost
-  become: yes
-  vars_files:
-    - host_vars/hypervisor
-    - ocp-cluster-vars/vars/common.yaml
-    - ocp-cluster-vars/vars/libvirt-hub/vars.yaml
-  tasks:
-    - name: Create VMs on hypervisor
-      include_tasks: ./hub.yaml
