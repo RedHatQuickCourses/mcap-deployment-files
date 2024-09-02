@@ -1,7 +1,7 @@
 ---
 - name: Make copy of qcow2 image for Storage VM
   ansible.builtin.copy:
-    src: /root/"{{ rhel_file_name }}"
+    src: "/root/{{ rhel_file_name }}"
     dest: "{{ rhel_qcow }}"
     owner: qemu
     group: qemu
