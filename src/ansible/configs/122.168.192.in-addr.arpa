@@ -16,68 +16,23 @@ $TTL    604800
 11.122.168.192.in-addr.arpa. 	   IN	PTR	sno1.lab.example.com.
 12.122.168.192.in-addr.arpa. 	   IN	PTR	sno2.lab.example.com.
 13.122.168.192.in-addr.arpa.	   IN	PTR	sno3.lab.example.com.
+
 21.122.168.192.in-addr.arpa.	   IN	PTR	tcn1.lab.example.com.
 22.122.168.192.in-addr.arpa.	   IN	PTR	tcn2.lab.example.com.
 23.122.168.192.in-addr.arpa.	   IN	PTR	tcn3.lab.example.com.
 
 10.122.168.192.in-addr.arpa.  IN	PTR api.hub.lab.example.com.
-10.122.168.192.in-addr.arpa.  IN	PTR oauth-openshift.apps.hub.lab.example.com.
-10.122.168.192.in-addr.arpa.  IN	PTR console-openshift-console.apps.hub.lab.example.com.
-10.122.168.192.in-addr.arpa.  IN	PTR grafana-openshift-monitoring.apps.hub.lab.example.com.
-10.122.168.192.in-addr.arpa.  IN	PTR thanos-querier-openshift-monitoring.apps.hub.lab.example.com.
-10.122.168.192.in-addr.arpa.  IN	PTR prometheus-k8s-openshift-monitoring.apps.hub.lab.example.com.
-10.122.168.192.in-addr.arpa.  IN	PTR alertmanager-main-openshift-monitoring.apps.hub.lab.example.com.
-10.122.168.192.in-addr.arpa.  IN	PTR assisted-image-service-multicluster-engine.apps.hub.lab.example.com.
-10.122.168.192.in-addr.arpa.  IN	PTR assisted-service-multicluster-engine.apps.hub.lab.example.com.
-10.122.168.192.in-addr.arpa.  IN	PTR downloads-openshift-console.apps.hub.lab.example.com.
+10.122.168.192.in-addr.arpa.  IN	PTR *.apps.hub.lab.example.com.
 
 11.122.168.192.in-addr.arpa.  IN	PTR api.sno1.lab.example.com.
-11.122.168.192.in-addr.arpa.  IN	PTR oauth-openshift.apps.sno1.lab.example.com.
-11.122.168.192.in-addr.arpa.  IN	PTR console-openshift-console.apps.sno1.lab.example.com.
-11.122.168.192.in-addr.arpa.  IN	PTR grafana-openshift-monitoring.apps.sno1.lab.example.com.
-11.122.168.192.in-addr.arpa.  IN	PTR thanos-querier-openshift-monitoring.apps.sno1.lab.example.com.
-11.122.168.192.in-addr.arpa.  IN	PTR prometheus-k8s-openshift-monitoring.apps.sno1.lab.example.com.
-11.122.168.192.in-addr.arpa.  IN	PTR alertmanager-main-openshift-monitoring.apps.sno1.lab.example.com.
-11.122.168.192.in-addr.arpa.  IN	PTR assisted-image-service-multicluster-engine.apps.sno1.lab.example.com.
-11.122.168.192.in-addr.arpa.  IN	PTR assisted-service-multicluster-engine.apps.sno1.lab.example.com.
-11.122.168.192.in-addr.arpa.  IN	PTR downloads-openshift-console.apps.sno1.lab.example.com.
-11.122.168.192.in-addr.arpa.  IN   PTR hyperconverged-cluster-cli-download-openshift-cnv.apps.sno1.lab.example.com.
-11.122.168.192.in-addr.arpa.  IN   PTR cdi-uploadproxy-openshift-cnv.apps.sno1.lab.example.com.
+11.122.168.192.in-addr.arpa.  IN	PTR *.apps.sno1.lab.example.com.
 
 12.122.168.192.in-addr.arpa.  IN	PTR api.sno2.lab.example.com.
-12.122.168.192.in-addr.arpa.  IN	PTR oauth-openshift.apps.sno2.lab.example.com.
-12.122.168.192.in-addr.arpa.  IN	PTR console-openshift-console.apps.sno2.lab.example.com.
-12.122.168.192.in-addr.arpa.  IN	PTR grafana-openshift-monitoring.apps.sno2.lab.example.com.
-12.122.168.192.in-addr.arpa.  IN	PTR thanos-querier-openshift-monitoring.apps.sno2.lab.example.com.
-12.122.168.192.in-addr.arpa.  IN	PTR prometheus-k8s-openshift-monitoring.apps.sno2.lab.example.com.
-12.122.168.192.in-addr.arpa.  IN	PTR alertmanager-main-openshift-monitoring.apps.sno2.lab.example.com.
-12.122.168.192.in-addr.arpa.  IN	PTR assisted-image-service-multicluster-engine.apps.sno2.lab.example.com.
-12.122.168.192.in-addr.arpa.  IN	PTR assisted-service-multicluster-engine.apps.sno2.lab.example.com.
-12.122.168.192.in-addr.arpa.  IN	PTR downloads-openshift-console.apps.sno2.lab.example.com.
-12.122.168.192.in-addr.arpa.  IN   PTR hyperconverged-cluster-cli-download-openshift-cnv.apps.sno2.lab.example.com.
-12.122.168.192.in-addr.arpa.  IN   PTR cdi-uploadproxy-openshift-cnv.apps.sno2.lab.example.com.
+12.122.168.192.in-addr.arpa.  IN	PTR *.apps.sno2.lab.example.com.
 
 13.122.168.192.in-addr.arpa.  IN	PTR api.sno3.lab.example.com.
-13.122.168.192.in-addr.arpa.  IN	PTR oauth-openshift.apps.sno3.lab.example.com.
-13.122.168.192.in-addr.arpa.  IN	PTR console-openshift-console.apps.sno3.lab.example.com.
-13.122.168.192.in-addr.arpa.  IN	PTR grafana-openshift-monitoring.apps.sno3.lab.example.com.
-13.122.168.192.in-addr.arpa.  IN	PTR thanos-querier-openshift-monitoring.apps.sno3.lab.example.com.
-13.122.168.192.in-addr.arpa.  IN	PTR prometheus-k8s-openshift-monitoring.apps.sno3.lab.example.com.
-13.122.168.192.in-addr.arpa.  IN	PTR alertmanager-main-openshift-monitoring.apps.sno3.lab.example.com.
-13.122.168.192.in-addr.arpa.  IN	PTR assisted-image-service-multicluster-engine.apps.sno3.lab.example.com.
-13.122.168.192.in-addr.arpa.  IN	PTR assisted-service-multicluster-engine.apps.sno3.lab.example.com.
-13.122.168.192.in-addr.arpa.  IN	PTR downloads-openshift-console.apps.sno3.lab.example.com.
-13.122.168.192.in-addr.arpa.  IN   PTR hyperconverged-cluster-cli-download-openshift-cnv.apps.sno3.lab.example.com.
-13.122.168.192.in-addr.arpa.  IN   PTR cdi-uploadproxy-openshift-cnv.apps.sno3.lab.example.com.
+13.122.168.192.in-addr.arpa.  IN	PTR *.apps.sno3.lab.example.com.
 
 24.122.168.192.in-addr.arpa.  IN	PTR api.tenant.lab.example.com.
-25.122.168.192.in-addr.arpa.  IN	PTR oauth-openshift.apps.tenant.lab.example.com.
-25.122.168.192.in-addr.arpa.  IN	PTR console-openshift-console.apps.tenant.lab.example.com.
-25.122.168.192.in-addr.arpa.  IN	PTR grafana-openshift-monitoring.apps.tenant.lab.example.com.
-25.122.168.192.in-addr.arpa.  IN	PTR thanos-querier-openshift-monitoring.apps.tenant.lab.example.com.
-25.122.168.192.in-addr.arpa.  IN	PTR prometheus-k8s-openshift-monitoring.apps.tenant.lab.example.com.
-25.122.168.192.in-addr.arpa.  IN	PTR alertmanager-main-openshift-monitoring.apps.tenant.lab.example.com.
-25.122.168.192.in-addr.arpa.  IN	PTR assisted-image-service-multicluster-engine.apps.tenant.lab.example.com.
-25.122.168.192.in-addr.arpa.  IN	PTR assisted-service-multicluster-engine.apps.tenant.lab.example.com.
-25.122.168.192.in-addr.arpa.  IN	PTR downloads-openshift-console.apps.tenant.lab.example.com.
+25.122.168.192.in-addr.arpa.  IN	PTR *.apps.tenant.lab.example.com.
 
