@@ -41,6 +41,8 @@ $TTL    604800
 11.122.168.192.in-addr.arpa.  IN	PTR assisted-image-service-multicluster-engine.apps.sno1.lab.example.com.
 11.122.168.192.in-addr.arpa.  IN	PTR assisted-service-multicluster-engine.apps.sno1.lab.example.com.
 11.122.168.192.in-addr.arpa.  IN	PTR downloads-openshift-console.apps.sno1.lab.example.com.
+11.122.168.192.in-addr.arpa.  IN   PTR hyperconverged-cluster-cli-download-openshift-cnv.apps.sno1.lab.example.com.
+11.122.168.192.in-addr.arpa.  IN   PTR cdi-uploadproxy-openshift-cnv.apps.sno1.lab.example.com.
 
 12.122.168.192.in-addr.arpa.  IN	PTR api.sno2.lab.example.com.
 12.122.168.192.in-addr.arpa.  IN	PTR oauth-openshift.apps.sno2.lab.example.com.
@@ -52,6 +54,8 @@ $TTL    604800
 12.122.168.192.in-addr.arpa.  IN	PTR assisted-image-service-multicluster-engine.apps.sno2.lab.example.com.
 12.122.168.192.in-addr.arpa.  IN	PTR assisted-service-multicluster-engine.apps.sno2.lab.example.com.
 12.122.168.192.in-addr.arpa.  IN	PTR downloads-openshift-console.apps.sno2.lab.example.com.
+12.122.168.192.in-addr.arpa.  IN   PTR hyperconverged-cluster-cli-download-openshift-cnv.apps.sno2.lab.example.com.
+12.122.168.192.in-addr.arpa.  IN   PTR cdi-uploadproxy-openshift-cnv.apps.sno2.lab.example.com.
 
 13.122.168.192.in-addr.arpa.  IN	PTR api.sno3.lab.example.com.
 13.122.168.192.in-addr.arpa.  IN	PTR oauth-openshift.apps.sno3.lab.example.com.
@@ -63,6 +67,8 @@ $TTL    604800
 13.122.168.192.in-addr.arpa.  IN	PTR assisted-image-service-multicluster-engine.apps.sno3.lab.example.com.
 13.122.168.192.in-addr.arpa.  IN	PTR assisted-service-multicluster-engine.apps.sno3.lab.example.com.
 13.122.168.192.in-addr.arpa.  IN	PTR downloads-openshift-console.apps.sno3.lab.example.com.
+13.122.168.192.in-addr.arpa.  IN   PTR hyperconverged-cluster-cli-download-openshift-cnv.apps.sno3.lab.example.com.
+13.122.168.192.in-addr.arpa.  IN   PTR cdi-uploadproxy-openshift-cnv.apps.sno3.lab.example.com.
 
 24.122.168.192.in-addr.arpa.  IN	PTR api.tenant.lab.example.com.
 25.122.168.192.in-addr.arpa.  IN	PTR oauth-openshift.apps.tenant.lab.example.com.
