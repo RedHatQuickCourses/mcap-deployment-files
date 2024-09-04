@@ -43,8 +43,6 @@
     state: directory
     path: "{{ storage_dir }}"
 
-##Registration play##
-
 - name: Define a new storage pool
   community.libvirt.virt_pool:
     command: define

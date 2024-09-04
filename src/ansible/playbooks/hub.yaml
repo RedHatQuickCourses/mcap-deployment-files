@@ -34,3 +34,13 @@
 
 - name: Start the hub VM
   ansible.builtin.shell: virsh start hub
+
+- name: Create the directory and file structure
+  ansible.builtin.command: "{{ item }}"
+  loop:
+    - mkdir /root/hub
+    - mkdir /root/.kube
+    - touch /root/.kube/config
+    - touch /root/hub/kubeadmin-password
+    - touch /root/hub/console-url
+    - touch /root/hub/kubeconfig

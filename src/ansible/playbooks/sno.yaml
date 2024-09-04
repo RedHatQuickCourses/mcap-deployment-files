@@ -61,3 +61,16 @@
 
 - name: Start the sno3 VM
   ansible.builtin.shell: virsh start sno3
+
+- name: Create the directory and file structure
+  ansible.builtin.command: "{{ item }}"
+  loop:
+    - mkdir /root/sno1
+    - touch /root/sno1/kubeadmin-password
+    - touch /root/sno1/kubeconfig
+    - mkdir /root/sno2
+    - touch /root/sno2/kubeadmin-password
+    - touch /root/sno2/kubeconfig
+    - mkdir /root/sno3
+    - touch /root/sno3/kubeadmin-password
+    - touch /root/sno3/kubeconfig
