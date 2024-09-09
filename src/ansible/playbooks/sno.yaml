@@ -74,3 +74,6 @@
     - mkdir /root/sno3
     - touch /root/sno3/kubeadmin-password
     - touch /root/sno3/kubeconfig
+    - mkdir /root/tenant
+    - touch /root/tenant/kubeadmin-password
+    - touch /root/tenant/kubeconfig
